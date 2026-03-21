@@ -1,0 +1,127 @@
+-- Création de la base de données
+CREATE DATABASE IF NOT EXISTS healthcare;
+USE healthcare;
+
+-- Table: users
+CREATE TABLE users (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    prenom VARCHAR(50) NOT NULL,
+    nom VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY(email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: profiles
+CREATE TABLE profiles (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    age TINYINT(3) UNSIGNED NOT NULL,
+    height_cm SMALLINT(5) UNSIGNED NOT NULL,
+    weight_kg DECIMAL(5,2) NOT NULL,
+    gender ENUM('male', 'female') NOT NULL,
+    activity_factor DECIMAL(4,3) NOT NULL DEFAULT 1.550,
+    goal ENUM('maintain', 'lose', 'gain') NOT NULL DEFAULT 'maintain',
+    medical_notes TEXT NULL,
+    bmi DECIMAL(4,1) NULL,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX(user_id),
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: ai_analyses
+CREATE TABLE ai_analyses (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    log_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    status VARCHAR(30) NOT NULL,
+    title VARCHAR(200) NULL,
+    summary TEXT NULL,
+    tips TEXT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX(log_id),
+    INDEX(user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: ai_chat_history
+CREATE TABLE ai_chat_history (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    role ENUM('user','bot') NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX(user_id),
+    INDEX(created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: ai_reports
+CREATE TABLE ai_reports (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    type ENUM('deficiency','menu') NOT NULL,
+    content LONGTEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX(user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: daily_logs
+CREATE TABLE daily_logs (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    log_date DATE NOT NULL,
+    total_kcal SMALLINT(5) UNSIGNED DEFAULT 0,
+    total_protein_g SMALLINT(5) UNSIGNED DEFAULT 0,
+    total_carbs_g SMALLINT(5) UNSIGNED DEFAULT 0,
+    total_fat_g SMALLINT(5) UNSIGNED DEFAULT 0,
+    status VARCHAR(30) DEFAULT 'pending',
+    INDEX(user_id),
+    INDEX(log_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: food_items
+CREATE TABLE food_items (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL COMMENT 'ex: petit-dejeuner, dejeuner, diner, collation',
+    portion_size VARCHAR(30) DEFAULT '100g',
+    kcal_per_portion SMALLINT(5) UNSIGNED NOT NULL,
+    protein_g DECIMAL(6,2) DEFAULT 0.00,
+    carbs_g DECIMAL(6,2) DEFAULT 0.00,
+    fat_g DECIMAL(6,2) DEFAULT 0.00,
+    fiber_g DECIMAL(6,2) DEFAULT 0.00,
+    vitamins VARCHAR(150) DEFAULT NULL COMMENT 'Vitamines principales',
+    minerals VARCHAR(150) DEFAULT NULL COMMENT 'Minéraux principaux',
+    is_healthy TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX(category)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: meals
+CREATE TABLE meals (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    log_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    meal_type VARCHAR(50) NOT NULL,
+    food_description TEXT NOT NULL,
+    kcal SMALLINT(5) UNSIGNED DEFAULT 0,
+    protein_g SMALLINT(5) UNSIGNED DEFAULT 0,
+    carbs_g SMALLINT(5) UNSIGNED DEFAULT 0,
+    fat_g SMALLINT(5) UNSIGNED DEFAULT 0,
+    estimated_by_ai TINYINT(1) DEFAULT 0,
+    added_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX(log_id),
+    INDEX(user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: nutrition_targets
+CREATE TABLE nutrition_targets (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    tdee_kcal SMALLINT(5) UNSIGNED NOT NULL,
+    protein_g SMALLINT(5) UNSIGNED NOT NULL,
+    carbs_g SMALLINT(5) UNSIGNED NOT NULL,
+    fat_g SMALLINT(5) UNSIGNED NOT NULL,
+    calculated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    INDEX(user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
