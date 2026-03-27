@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+ 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriBalance — Contrôle Alimentaire Intelligent</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+ 
+<body>
+ 
+  <!-- NAV -->
+  <nav id="main-nav" style="display:none">
+    <div class="logo">Nutri<span>Balance</span></div>
+    <div class="nav-links">
+      <button class="nav-link" onclick="showScreen('dashboard'); buildDashboard()">🏠 Dashboard</button>
+      <button class="nav-link" onclick="showScreen('coach'); loadChatHistory()">💬 Coach IA</button>
+      <button class="nav-link" onclick="showScreen('trends')">📈 Tendances</button>
+      <button class="nav-link" onclick="showScreen('profile'); buildProfileCard()">👤 Profil</button>
+    </div>
+    <div class="nav-user">
+      <div class="avatar" id="nav-avatar">?</div>
+      <span class="nav-name" id="nav-name"></span>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="screen active" id="screen-auth">
+    <div class="auth-card">
+      <div class="auth-title">NutriBalance</div>
+      <div class="auth-sub">Contrôle alimentaire intelligent basé sur votre profil santé</div>
+
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('login')">Connexion</button>
+        <button class="tab-btn" onclick="switchTab('register')">Créer un compte</button>
+      </div>
+
+      <div id="tab-login">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="votre@email.com">
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <input type="password" id="login-pass" placeholder="••••••••">
+        </div>
+        <div id="login-error" class="error-msg"></div>
+        <button class="btn-primary" onclick="login()">Se connecter</button>
+      </div>
+ 
+      <div id="tab-register" style="display:none">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" id="reg-prenom" placeholder="Ali">
+          </div>
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" id="reg-nom" placeholder="Ben Salah">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="votre@email.com">
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <input type="password" id="reg-pass" placeholder="Minimum 6 caractères">
+        </div>
+        <div class="form-row3">
+          <div class="form-group">
+            <label>Âge</label>
+            <input type="number" id="reg-age" placeholder="30" min="10" max="100">
+          </div>
+          <div class="form-group">
+            <label>Taille (cm)</label>
+            <input type="number" id="reg-height" placeholder="175" min="100" max="250">
+          </div>
+          <div class="form-group">
+            <label>Poids (kg)</label>
+            <input type="number" id="reg-weight" placeholder="70" min="30" max="300">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Sexe</label>
+            <div class="goal-select-wrap">
+              <select id="reg-gender">
+                <option value="male">Homme</option>
+                <option value="female">Femme</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Activité physique</label>
+            <div class="goal-select-wrap">
+              <select id="reg-activity">
+                <option value="1.2">Sédentaire</option>
+                <option value="1.375">Légère (1-3j/sem)</option>
+                <option value="1.55" selected>Modérée (3-5j/sem)</option>
+                <option value="1.725">Active (6-7j/sem)</option>
+                <option value="1.9">Très active</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Objectif</label>
+          <div class="goal-select-wrap">
+            <select id="reg-goal">
+              <option value="maintain">Maintenir le poids</option>
+              <option value="lose">Perdre du poids</option>
+              <option value="gain">Prendre du muscle</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Conditions médicales / Notes (bilan de santé)</label>
+          <textarea id="reg-medical" rows="2"
+            placeholder="Ex: diabète type 2, hypertension, allergie au gluten..."></textarea>
+          <div class="hint">Optionnel — pour personnaliser les recommandations</div>
+        </div>
+        <div id="reg-error" class="error-msg"></div>
+        <div id="reg-success" class="success-msg"></div>
+        <button class="btn-primary" onclick="register()">Créer mon compte</button>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="screen" id="screen-profile">
+    <div class="profile-wrap">
+      <div class="profile-header">
+        <div class="profile-icon">👤</div>
+        <div class="section-title">Mon Profil Santé</div>
+        <div class="badge">✓ Profil certifié</div>
+      </div>
+      <div class="card" id="profile-info-card"></div>
+      <div class="card" id="profile-bmi-card"></div>
+      <button class="btn-primary" onclick="goToDashboard()" style="max-width:300px;margin:0 auto;display:block">
+        Accéder au tableau de bord →
+      </button>
+    </div>
+  </div>
+ 
+  <div class="screen" id="screen-dashboard">
+    <div class="dashboard-wrap">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title" id="dash-greeting">Bonjour 👋</div>
+          <div class="date-badge" id="dash-date"></div>
+        </div>
+      </div>
+ 
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-val" id="stat-cal">0</div>
+          <div class="stat-label">kcal consommées</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="stat-target">0</div>
+          <div class="stat-label">kcal objectif</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="stat-remaining">0</div>
+          <div class="stat-label">kcal restantes</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="stat-meals">0</div>
+          <div class="stat-label">repas enregistrés</div>
+        </div>
+      </div>
+ 
+      <div class="card">
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-label">Calories</span>
+            <span class="progress-pct" id="cal-pct">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="cal-bar" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="macros-row" style="margin-top:1rem;margin-bottom:0">
+          <div class="macro-card">
+            <div class="macro-name">Protéines</div>
+            <div class="macro-val" id="m-protein">0g</div>
+            <div class="macro-target" id="mt-protein">/ 0g</div>
+            <div class="macro-bar">
+              <div class="macro-fill protein" id="mb-protein" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="macro-card">
+            <div class="macro-name">Glucides</div>
+            <div class="macro-val" id="m-carbs">0g</div>
+            <div class="macro-target" id="mt-carbs">/ 0g</div>
+            <div class="macro-bar">
+              <div class="macro-fill carbs" id="mb-carbs" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="macro-card">
+            <div class="macro-name">Lipides</div>
+            <div class="macro-val" id="m-fat">0g</div>
+            <div class="macro-target" id="mt-fat">/ 0g</div>
+            <div class="macro-bar">
+              <div class="macro-fill fat" id="mb-fat" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="add-meal-card">
+        <div class="section-title" style="font-size:1rem;margin-bottom:0.8rem">➕ Ajouter un aliment</div>
+        <div class="meal-type-row" id="meal-types">
+          <button class="meal-type-btn active" onclick="selectMealType(this,'petit-déjeuner')">🌅
+            Petit-déjeuner</button>
+          <button class="meal-type-btn" onclick="selectMealType(this,'déjeuner')">☀️ Déjeuner</button>
+          <button class="meal-type-btn" onclick="selectMealType(this,'dîner')">🌙 Dîner</button>
+          <button class="meal-type-btn" onclick="selectMealType(this,'collation')">🍎 Collation</button>
+        </div>
+        <div class="food-input-row">
+          <div class="scanner-btn" onclick="scanPhoto()" title="Scanner une photo">📷</div>
+          <input type="text" id="food-input" placeholder="Ex: 200g de poulet grillé, 1 œuf, 250ml lait..."
+            onkeydown="if(event.key==='Enter')addFood()">
+          <button class="btn-add" id="add-btn" onclick="addFood()">Ajouter</button>
+        </div>
+        <div class="hint" style="margin-top:6px">Soyez précis sur la quantité pour une meilleure analyse</div>
+ 
+        <div class="meals-list" id="meals-list">
+          <div class="empty-state">
+            <div class="ei">🍽️</div>Aucun aliment ajouté aujourd'hui
+          </div>
+        </div>
+      </div>
+ 
+      <div class="ai-analytics-section" style="margin-top:2rem">
+        <div class="section-title" style="margin-bottom:1rem">✨ Intelligence Artificielle</div>
+        <div class="ai-actions-grid">
+          <div class="ai-action-card" onclick="predictDeficiencies()">
+            <div class="ai-card-icon">🔍</div>
+            <div class="ai-card-name">Prédire carences</div>
+            <div class="ai-card-sub">Analyse sur 7/30 jours</div>
+          </div>
+          <div class="ai-action-card" onclick="generateMenu()">
+            <div class="ai-card-icon">📅</div>
+            <div class="ai-card-name">Générer menu</div>
+            <div class="ai-card-sub">Plan de repas complet</div>
+          </div>
+        </div>
+      </div>
+ 
+      <button class="btn-analyze" id="analyze-btn" onclick="analyzeNutrition()" disabled style="margin-top:1.5rem">
+        🤖 Analyser mon alimentation (Aujourd'hui)
+      </button>
+ 
+      <div id="analysis-result"></div>
+ 
+      <div class="card" id="tips-card" style="display:none">
+        <div class="section-title" style="font-size:1rem">💡 Recommandations personnalisées</div>
+        <ul class="tips-list" id="tips-list"></ul>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="screen" id="screen-coach">
+    <div class="coach-wrap">
+      <div class="coach-header">
+        <div class="coach-avatar">🤖</div>
+        <div>
+          <div class="coach-name">Coach Nutri IA</div>
+          <div class="coach-status">En ligne — Prêt à vous aider</div>
+        </div>
+      </div>
+      <div class="chat-container" id="chat-messages">
+        <div class="bot-msg">Bonjour ! Je suis votre coach nutritionnel. Comment puis-je vous aider aujourd'hui ?</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="Posez votre question..."
+          onkeydown="if(event.key==='Enter')sendMessage()">
+        <button class="btn-send" onclick="sendMessage()">Envoyer</button>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="screen" id="screen-trends">
+    <div class="trends-wrap">
+ 
+      <div class="trends-header">
+        <div class="section-title" style="margin-bottom:0">📈 Analyse &amp; Menus</div>
+        <div class="trends-subtitle">Insights nutritionnels personnalisés par IA</div>
+      </div>
+ 
+      <div class="trend-tabs">
+        <button class="trend-tab active" onclick="switchTrendTab(this, 'deficiencies')">
+          <span class="trend-tab-icon">🔍</span> Carences
+        </button>
+        <button class="trend-tab" onclick="switchTrendTab(this, 'menus')">
+          <span class="trend-tab-icon">📅</span> Menu hebdo
+        </button>
+      </div>
+ 
+      <div id="trend-content-deficiencies" class="trend-content">
+        <div class="card trends-card">
+          <div class="trends-card-header">
+            <div>
+              <div class="trends-card-title">🔍 Prédiction des carences</div>
+              <div class="trends-card-desc">Basé sur votre historique alimentaire</div>
+            </div>
+            <div class="deficiency-controls">
+              <div class="period-toggle">
+                <button class="period-btn active" id="period-7" onclick="setPeriod(this, 7)">7j</button>
+                <button class="period-btn" id="period-30" onclick="setPeriod(this, 30)">30j</button>
+              </div>
+              <button class="btn-analyze-sm" onclick="predictDeficiencies()">
+                ✨ Analyser
+              </button>
+            </div>
+          </div>
+          <div class="deficiency-list" id="deficiency-list">
+            <div class="empty-state">
+              <div class="empty-icon">🧬</div>
+              <div>Lancez l'analyse pour détecter vos carences potentielles</div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+      <div id="trend-content-menus" class="trend-content" style="display:none">
+        <div class="card trends-card">
+          <div class="trends-card-header">
+            <div>
+              <div class="trends-card-title">📅 Plan repas personnalisé</div>
+              <div class="trends-card-desc">7 jours adaptés à votre profil et objectifs</div>
+            </div>
+            <button class="btn-analyze-sm" onclick="generateMenu()">
+              ✨ Générer
+            </button>
+          </div>
+          <div class="menu-display" id="menu-display">
+            <div class="empty-state">
+              <div class="empty-icon">🍽️</div>
+              <div>Générez votre plan repas hebdomadaire personnalisé</div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+ 
+  <script src="app.js"></script>
+</body>
+ 
+</html>

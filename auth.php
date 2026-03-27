@@ -11,8 +11,7 @@ switch ($action) {
         try {
             $pdo->beginTransaction();
             //compte
-            $stmt = $pdo->prepare(
-                "INSERT INTO users (prenom, nom, email, password_hash)VALUES (?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO users (prenom, nom, email, password_hash)VALUES (?, ?, ?, ?)");
             $stmt->execute([
                 $data['prenom'],
                 $data['nom'],
@@ -22,13 +21,9 @@ switch ($action) {
             $userId = $pdo->lastInsertId();
             //Calculer
             $bmi     = calculateBMI($data['height'], $data['weight']);
-            $targets = calculateTargets(
-                $data['age'], $data['height'], $data['weight'],
-                $data['gender'], $data['activity'], $data['goal']
-            );
+            $targets = calculateTargets($data['age'], $data['height'], $data['weight'],$data['gender'], $data['activity'], $data['goal']);
             //Enregistrer
-            $stmt = $pdo->prepare(
-                "INSERT INTO profiles (user_id, age, height_cm, weight_kg, gender,activity_factor, goal, medical_notes, bmi)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $pdo->prepare(      "INSERT INTO profiles (user_id, age, height_cm, weight_kg, gender,activity_factor, goal, medical_notes, bmi)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([
                 $userId,
                 $data['age'],
@@ -40,8 +35,8 @@ switch ($action) {
                 $data['medical'] ?? '',
                 $bmi
             ]);
-            $stmt = $pdo->prepare(
-                "INSERT INTO nutrition_targets (user_id, tdee_kcal, protein_g, carbs_g, fat_g) VALUES (?, ?, ?, ?, ?)");
+            //Enregistrer les objectifs
+            $stmt = $pdo->prepare("INSERT INTO nutrition_targets (user_id, tdee_kcal, protein_g, carbs_g, fat_g) VALUES (?, ?, ?, ?, ?)");
             $stmt->execute([
                 $userId,
                 $targets['tdee_kcal'],
@@ -65,14 +60,12 @@ switch ($action) {
         if ($user && password_verify($data['pass'], $user['password_hash'])) {
             $_SESSION['user_id']   = $user['id'];
             $_SESSION['user_name'] = $user['prenom'];
-            jsonResponse(true, [
-                'user' => ['id' => $user['id'], 'prenom' => $user['prenom']]
-            ]);
+            jsonResponse(true, ['user' => ['id' => $user['id'], 'prenom' => $user['prenom']]]);
         } else {
             jsonResponse(false, [], 'Identifiants incorrects');
         }
         break;
-    //Déconnexion
+    //deconnexion
     case 'logout':
         session_destroy();
         jsonResponse(true);
