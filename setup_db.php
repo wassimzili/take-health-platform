@@ -203,16 +203,16 @@ $pdo->exec("SET FOREIGN_KEY_CHECKS=1");
 
   <h2> Tables créées</h2>
   <?php foreach ($created as $t): ?>
-    <div class="row"><span class="ok">✓</span><span><?= htmlspecialchars($t) ?></span></div>
+    <div class="row"><span class="ok">ok</span><span><?= htmlspecialchars($t) ?></span></div>
   <?php endforeach; ?>
 
   <?php if ($foodsInserted > 0): ?>
     <h2> Aliments insérés</h2>
-    <div class="row"><span class="ok">✓</span><span><strong><?= $foodsInserted ?></strong> aliments ajoutés dans <code>food_items</code></span></div>
+    <div class="row"><span class="ok">ok</span><span><strong><?= $foodsInserted ?></strong> aliments ajoutés dans <code>food_items</code></span></div>
   <?php endif; ?>
 
   <?php if (!empty($skipped)): ?>
-    <h2>⏭ Ignorés (déjà présents)</h2>
+    <h2> Ignorés (déjà présents)</h2>
     <?php foreach ($skipped as $s): ?>
       <div class="row"><span class="info">→</span><span><?= htmlspecialchars($s) ?></span></div>
     <?php endforeach; ?>
