@@ -220,7 +220,7 @@ $pdo->exec("SET FOREIGN_KEY_CHECKS=1");
 
   <?php if (empty($errors)): ?>
     <div class="alert">
-      <strong> Base de données prête !</strong><br><br>
+      <strong> Base de données prête </strong><br><br>
       <?php if ($foodsInserted > 0): ?>
         <span style="color:#94a3b8"><?= $foodsInserted ?> aliments de référence disponibles.</span><br><br>
       <?php endif; ?>
