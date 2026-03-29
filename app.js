@@ -2,13 +2,11 @@ let currentUser = null;
 let currentMealType = 'petit-déjeuner';
 let todayMeals = [];
 let targets = {};
-let analysisPeriod = 7; // 7 or 30 days for deficiency analysis
+let analysisPeriod = 7;
 const TODAY = new Date().toDateString();
 
 function switchTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach((b, i) =>
-        b.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1))
-    );
+    document.querySelectorAll('.tab-btn').forEach((b, i) =>b.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'register' && i === 1)));
     document.getElementById('tab-login').style.display = tab === 'login' ? '' : 'none';
     document.getElementById('tab-register').style.display = tab === 'register' ? '' : 'none';
 }
@@ -40,14 +38,11 @@ async function register() {
         return;
     }
 
-    const resp = await fetch('api/auth.php?action=register', {
-        method: 'POST',
-        body: JSON.stringify({ prenom, nom, email, pass, age, height, weight, gender, activity, goal, medical })
-    });
+    const resp = await fetch('api/auth.php?action=register', {method: 'POST',body: JSON.stringify({ prenom, nom, email, pass, age, height, weight, gender, activity, goal, medical }});
     const res = await resp.json();
 
     if (res.success) {
-        sucEl.textContent = '✓ Compte créé ! Connexion en cours...';
+        sucEl.textContent = ' Compte créé ! Connexion en cours...';
         setTimeout(() => {
             document.getElementById('login-email').value = email;
             document.getElementById('login-pass').value = pass;
@@ -182,3 +177,96 @@ function goToDashboard() {
     showScreen('dashboard');
     buildDashboard();
 }
+
+
+async function scanPhoto() {
+    const btn = document.querySelector('.scanner-btn');
+    btn.style.opacity = '0.5';
+    btn.textContent = 'traitement...';
+
+    const resp = await fetch('api/ai.php?action=scan_photo');
+    const res = await resp.json();
+
+    if (res.success) {
+        document.getElementById('food-input').value = res.food;
+
+        const inputEl = document.getElementById('food-input');
+        inputEl.style.borderColor = 'var(--accent)';
+        setTimeout(() => { inputEl.style.borderColor = ''; }, 2000);
+    }
+
+    btn.style.opacity = '1';
+    btn.textContent = 'scanner';
+}
+
+async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const sendBtn = document.querySelector('.btn-send');
+    const container = document.getElementById('chat-messages');
+
+    container.innerHTML += `<div class="user-msg">${msg}</div>`;
+    input.value = '';
+    input.disabled = true;
+    sendBtn.disabled = true;
+    container.scrollTop = container.scrollHeight;
+
+    const typingId = 'typing-' + Date.now();
+    container.innerHTML += `<div class="bot-msg" id="${typingId}" style="opacity:0.6">Coach en train d'écrire...</div>`;
+    container.scrollTop = container.scrollHeight;
+
+    try {
+        const resp = await fetch('api/ai.php?action=chat', {
+            method: 'POST',
+            body: JSON.stringify({ message: msg })
+        });
+        const res = await resp.json();
+
+        const typingEl = document.getElementById(typingId);
+        if (res.success && res.reply) {
+            typingEl.textContent = res.reply;
+            typingEl.style.opacity = '1';
+        } else {
+            typingEl.innerHTML = ` <em>${res.error || 'Pas de réponse du serveur. Vérifiez qu\'Ollama est lancé.'}</em>`;
+            typingEl.style.opacity = '0.8';
+        }
+    } catch (err) {
+        const typingEl = document.getElementById(typingId);
+        if (typingEl) typingEl.innerHTML = ` <em>Erreur réseau : ${err.message}</em>`;
+    } finally {
+        input.disabled = false;
+        sendBtn.disabled = false;
+        input.focus();
+        container.scrollTop = container.scrollHeight;
+    }
+}
+
+async function loadChatHistory() {
+    const resp = await fetch('api/ai.php?action=get_chat_history');
+    const res = await resp.json();
+    if (res.success && res.history.length > 0) {
+        const container = document.getElementById('chat-messages');
+        container.innerHTML = res.history.map(h =>
+            `<div class="${h.role === 'user' ? 'user-msg' : 'bot-msg'}">${h.message}</div>`
+        ).join('');
+        container.scrollTop = container.scrollHeight;
+    }
+}
+
+
+
+const NUTRIENT_ICONS = {
+    'Fer': 'Fe',
+    'Vitamine D': 'D',
+    'Magnésium': 'Mag',
+    'Calcium': 'Cl',
+    'Zinc': 'Zn',
+    'Vitamine C': 'C',
+    'Vitamine B12': 'B12',
+    'Oméga-3': 'Ω3',
+    'Protéines': 'P',
+    'Glucides': 'G',
+    'Lipides': 'L'
+};
