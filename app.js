@@ -38,11 +38,11 @@ async function register() {
         return;
     }
 
-    const resp = await fetch('api/auth.php?action=register', {method: 'POST',body: JSON.stringify({ prenom, nom, email, pass, age, height, weight, gender, activity, goal, medical }});
+    const resp = await fetch('api/auth.php?action=register', {method: 'POST', body: JSON.stringify({ prenom, nom, email, pass, age, height, weight, gender, activity, goal, medical })});
     const res = await resp.json();
 
     if (res.success) {
-        sucEl.textContent = ' Compte créé ! Connexion en cours...';
+        sucEl.textContent = 'Compte créé ! Connexion en cours...';
         setTimeout(() => {
             document.getElementById('login-email').value = email;
             document.getElementById('login-pass').value = pass;
@@ -120,19 +120,19 @@ function buildProfileCard() {
     const bmiInfo = getBMICategory(u.bmi);
 
     document.getElementById('profile-info-card').innerHTML = `
-        <div class="section-title" style="font-size:1rem"> Informations personnelles</div>
+        <div class="section-title" style="font-size:1rem">Informations personnelles</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-top:1rem">
-            ${infoRow(' Nom complet', currentUser.prenom)}
-            ${infoRow(' Âge', u.age + ' ans')}
-            ${infoRow(' Taille', u.height_cm + ' cm')}
-            ${infoRow(' Poids', u.weight_kg + ' kg')}
-            ${infoRow(' Objectif', { maintain: 'Maintenir', lose: 'Perdre du poids', gain: 'Prendre du muscle' }[u.goal])}
-            ${infoRow(' Calories/jour', (currentUser.targets ? currentUser.targets.tdee_kcal : 0) + ' kcal')}
-            ${u.medical_notes ? infoRow(' Bilan santé', u.medical_notes, true) : ''}
+            ${infoRow('Nom complet', currentUser.prenom)}
+            ${infoRow('Âge', u.age + ' ans')}
+            ${infoRow('Taille', u.height_cm + ' cm')}
+            ${infoRow('Poids', u.weight_kg + ' kg')}
+            ${infoRow('Objectif', { maintain: 'Maintenir', lose: 'Perdre du poids', gain: 'Prendre du muscle' }[u.goal])}
+            ${infoRow('Calories/jour', (currentUser.targets ? currentUser.targets.tdee_kcal : 0) + ' kcal')}
+            ${u.medical_notes ? infoRow('Bilan santé', u.medical_notes, true) : ''}
         </div>`;
 
     document.getElementById('profile-bmi-card').innerHTML = `
-        <div class="section-title" style="font-size:1rem"> Indice de Masse Corporelle (IMC)</div>
+        <div class="section-title" style="font-size:1rem">Indice de Masse Corporelle (IMC)</div>
         <div class="bmi-display">
             <div class="bmi-val" style="color:${bmiInfo.color}">${u.bmi}</div>
             <div class="bmi-label">${bmiInfo.label}</div>
@@ -214,7 +214,7 @@ async function sendMessage() {
     container.scrollTop = container.scrollHeight;
 
     const typingId = 'typing-' + Date.now();
-    container.innerHTML += `<div class="bot-msg" id="${typingId}" style="opacity:0.6">Coach en train d'écrire...</div>`;
+    container.innerHTML += `<div class="bot-msg" id="${typingId}" style="opacity:0.6">L'assistant est en train d'écrire...</div>`;
     container.scrollTop = container.scrollHeight;
 
     try {
@@ -259,14 +259,14 @@ async function loadChatHistory() {
 
 const NUTRIENT_ICONS = {
     'Fer': 'Fe',
-    'Vitamine D': 'D',
-    'Magnésium': 'Mag',
-    'Calcium': 'Cl',
+    'Vitamine D': 'D3',
+    'Magnésium': 'Mg',
+    'Calcium': 'Ca',
     'Zinc': 'Zn',
     'Vitamine C': 'C',
     'Vitamine B12': 'B12',
     'Oméga-3': 'Ω3',
-    'Protéines': 'P',
-    'Glucides': 'G',
-    'Lipides': 'L'
+    'Protéines': 'Prot',
+    'Glucides': 'Gluc',
+    'Lipides': 'Lip'
 };

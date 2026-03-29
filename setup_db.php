@@ -194,7 +194,7 @@ $pdo->exec("SET FOREIGN_KEY_CHECKS=1");
 
   <?php if (!empty($errors)): ?>
     <div class="alert error">
-      <strong>❌ Erreurs :</strong><br>
+      <strong> Erreurs :</strong><br>
       <?php foreach ($errors as $e): ?>
         <div style="margin-top:6px;font-size:0.85rem;color:#f87171"><?= htmlspecialchars($e) ?></div>
       <?php endforeach; ?>

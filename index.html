@@ -17,13 +17,13 @@
   <nav id="main-nav" style="display:none">
     <div class="logo">Nutri<span>Balance</span></div>
     <div class="nav-links">
-      <button class="nav-link" onclick="showScreen('dashboard'); buildDashboard()"> Dashboard</button>
-      <button class="nav-link" onclick="showScreen('coach'); loadChatHistory()"> Coach IA</button>
-      <button class="nav-link" onclick="showScreen('trends')"> Tendances</button>
-      <button class="nav-link" onclick="showScreen('profile'); buildProfileCard()"> Profil</button>
+      <button class="nav-link" onclick="showScreen('dashboard'); buildDashboard()">Tableau de bord</button>
+      <button class="nav-link" onclick="showScreen('coach'); loadChatHistory()">Assistant IA</button>
+      <button class="nav-link" onclick="showScreen('trends')">Analyses</button>
+      <button class="nav-link" onclick="showScreen('profile'); buildProfileCard()">Profil</button>
     </div>
     <div class="nav-user">
-      <div class="avatar" id="nav-avatar">?</div>
+      <div class="avatar" id="nav-avatar">P</div>
       <span class="nav-name" id="nav-name"></span>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
     </div>
@@ -134,9 +134,9 @@
   <div class="screen" id="screen-profile">
     <div class="profile-wrap">
       <div class="profile-header">
-        <div class="profile-icon">profile</div>
+        <div class="profile-icon">P</div>
         <div class="section-title">Mon Profil Santé</div>
-        <div class="badge">✓ Profil certifié</div>
+        <div class="badge">Profil certifié ✓</div>
       </div>
       <div class="card" id="profile-info-card"></div>
       <div class="card" id="profile-bmi-card"></div>
@@ -213,15 +213,15 @@
       </div>
  
       <div class="add-meal-card">
-        <div class="section-title" style="font-size:1rem;margin-bottom:0.8rem"> Ajouter un aliment</div>
+        <div class="section-title" style="font-size:1rem;margin-bottom:0.8rem">Ajouter un aliment</div>
         <div class="meal-type-row" id="meal-types">
           <button class="meal-type-btn active" onclick="selectMealType(this,'petit-déjeuner')">Petit-déjeuner</button>
-          <button class="meal-type-btn" onclick="selectMealType(this,'déjeuner')"> Déjeuner</button>
-          <button class="meal-type-btn" onclick="selectMealType(this,'dîner')"> Dîner</button>
-          <button class="meal-type-btn" onclick="selectMealType(this,'collation')"> Collation</button>
+          <button class="meal-type-btn" onclick="selectMealType(this,'déjeuner')">Déjeuner</button>
+          <button class="meal-type-btn" onclick="selectMealType(this,'dîner')">Dîner</button>
+          <button class="meal-type-btn" onclick="selectMealType(this,'collation')">Collation</button>
         </div>
         <div class="food-input-row">
-          <div class="scanner-btn" onclick="scanPhoto()" title="Scanner une photo">scanner</div>
+          <div class="scanner-btn" onclick="scanPhoto()" title="Scanner une photo">Scanner</div>
           <input type="text" id="food-input" placeholder="Ex: 200g de poulet grillé, 1 œuf, 250ml lait..."
             onkeydown="if(event.key==='Enter')addFood()">
           <button class="btn-add" id="add-btn" onclick="addFood()">Ajouter</button>
@@ -230,32 +230,35 @@
  
         <div class="meals-list" id="meals-list">
           <div class="empty-state">
-            <div class="ei">aliment</div>Aucun aliment ajouté aujourd'hui
+            <div class="ei"></div>Aucun aliment ajouté aujourd'hui
           </div>
         </div>
       </div>
  
       <div class="ai-analytics-section" style="margin-top:2rem">
-        <div class="section-title" style="margin-bottom:1rem"> Intelligence Artificielle</div>
+        <div class="section-title" style="margin-bottom:1rem">Intelligence Artificielle</div>
         <div class="ai-actions-grid">
           <div class="ai-action-card" onclick="predictDeficiencies()">
-            <div class="ai-card-name">Prédire carences</div>
+            <div class="ai-card-icon"></div>
+            <div class="ai-card-name">Prédire les carences</div>
             <div class="ai-card-sub">Analyse sur 7/30 jours</div>
           </div>
           <div class="ai-action-card" onclick="generateMenu()">
-            <div class="ai-card-name">Générer menu</div>
+            <div class="ai-card-icon"></div>
+            <div class="ai-card-name">Générer un menu</div>
             <div class="ai-card-sub">Plan de repas complet</div>
           </div>
         </div>
       </div>
  
-      <button class="btn-analyze" id="analyze-btn" onclick="analyzeNutrition()" disabled style="margin-top:1.5rem">Analyser mon alimentation (Aujourd'hui)
+      <button class="btn-analyze" id="analyze-btn" onclick="analyzeNutrition()" disabled style="margin-top:1.5rem">
+        Lancer l'analyse (Aujourd'hui)
       </button>
  
       <div id="analysis-result"></div>
  
       <div class="card" id="tips-card" style="display:none">
-        <div class="section-title" style="font-size:1rem"> Recommandations personnalisées</div>
+        <div class="section-title" style="font-size:1rem">Recommandations personnalisées</div>
         <ul class="tips-list" id="tips-list"></ul>
       </div>
     </div>
@@ -264,13 +267,14 @@
   <div class="screen" id="screen-coach">
     <div class="coach-wrap">
       <div class="coach-header">
+        <div class="coach-avatar">IA</div>
         <div>
-          <div class="coach-name">Coach Nutri IA</div>
+          <div class="coach-name">Assistant Nutritionnel IA</div>
           <div class="coach-status">En ligne — Prêt à vous aider</div>
         </div>
       </div>
       <div class="chat-container" id="chat-messages">
-        <div class="bot-msg">Bonjour ! Je suis votre coach nutritionnel. Comment puis-je vous aider aujourd'hui ?</div>
+        <div class="bot-msg">Bonjour ! Je suis votre assistant nutritionnel. Comment puis-je vous aider aujourd'hui ?</div>
       </div>
       <div class="chat-input-row">
         <input type="text" id="chat-input" placeholder="Posez votre question..."
@@ -284,14 +288,16 @@
     <div class="trends-wrap">
  
       <div class="trends-header">
-        <div class="section-title" style="margin-bottom:0"> Analyse &amp; Menus</div>
-        <div class="trends-subtitle">Insights nutritionnels personnalisés par IA</div>
+        <div class="section-title" style="margin-bottom:0">Analyse &amp; Menus</div>
+        <div class="trends-subtitle">Analyses nutritionnelles personnalisées par IA</div>
       </div>
  
       <div class="trend-tabs">
         <button class="trend-tab active" onclick="switchTrendTab(this, 'deficiencies')">
+          <span class="trend-tab-icon"></span> Carences
         </button>
         <button class="trend-tab" onclick="switchTrendTab(this, 'menus')">
+          <span class="trend-tab-icon"></span> Menu hebdomadaire
         </button>
       </div>
  
@@ -299,7 +305,7 @@
         <div class="card trends-card">
           <div class="trends-card-header">
             <div>
-              <div class="trends-card-title"> Prédiction des carences</div>
+              <div class="trends-card-title">Prédiction des carences</div>
               <div class="trends-card-desc">Basé sur votre historique alimentaire</div>
             </div>
             <div class="deficiency-controls">
@@ -307,12 +313,14 @@
                 <button class="period-btn active" id="period-7" onclick="setPeriod(this, 7)">7j</button>
                 <button class="period-btn" id="period-30" onclick="setPeriod(this, 30)">30j</button>
               </div>
-              <button class="btn-analyze-sm" onclick="predictDeficiencies()">Analyser
+              <button class="btn-analyze-sm" onclick="predictDeficiencies()">
+                Analyser
               </button>
             </div>
           </div>
           <div class="deficiency-list" id="deficiency-list">
             <div class="empty-state">
+              <div class="empty-icon"></div>
               <div>Lancez l'analyse pour détecter vos carences potentielles</div>
             </div>
           </div>
@@ -323,14 +331,16 @@
         <div class="card trends-card">
           <div class="trends-card-header">
             <div>
-              <div class="trends-card-title"> Plan repas personnalisé</div>
+              <div class="trends-card-title">Plan repas personnalisé</div>
               <div class="trends-card-desc">7 jours adaptés à votre profil et objectifs</div>
             </div>
-            <button class="btn-analyze-sm" onclick="generateMenu()">Générer
+            <button class="btn-analyze-sm" onclick="generateMenu()">
+              Générer
             </button>
           </div>
           <div class="menu-display" id="menu-display">
             <div class="empty-state">
+              <div class="empty-icon"></div>
               <div>Générez votre plan repas hebdomadaire personnalisé</div>
             </div>
           </div>
