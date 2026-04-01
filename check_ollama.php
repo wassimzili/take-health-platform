@@ -113,7 +113,7 @@ try {
 
   <?php if ($ollamaUp && $dbOk && $curlOk): ?>
     <div class="card" style="border: 1px solid #4ade80">
-      <div class="icon">🎉</div>
+      <div class="icon">ok</div>
       <div>
         <div class="val ok">Tout est opérationnel !</div>
         <div style="margin-top:8px"><a href="/take_health/">→ Retour à l'application</a></div>
