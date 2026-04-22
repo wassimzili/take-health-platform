@@ -1,7 +1,6 @@
 <<<<<<< HEAD
 
-=======
->>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
+======
 let currentUser = null;
 let currentMealType = 'petit-déjeuner';
 let todayMeals = [];

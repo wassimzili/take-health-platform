@@ -2,15 +2,8 @@
 
 require_once __DIR__ . '/config/ollama_config.php';
 
-<<<<<<< HEAD
-
 $curlOk = function_exists('curl_init');
 
-
-=======
-$curlOk = function_exists('curl_init');
-
->>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
 $ollamaUp  = false;
 $ollamaErr = '';
 $ollamaReply = null;
@@ -30,10 +23,6 @@ if ($curlOk) {
     $ollamaErr = "L'extension PHP cURL n'est pas activée.";
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
 require_once __DIR__ . '/config/db.php';
 $dbOk = false;
 $dbErr = '';
@@ -73,18 +62,10 @@ try {
   </style>
 </head>
 <body>
-<<<<<<< HEAD
-  <h1>[DIAGNOSIS] Diagnostic - Take Health / Ollama</h1>
-
-
-  <div class="card">
-    <div class="icon"><?= $curlOk ? '[OK]' : '[ERR]' ?></div>
-=======
   <h1> Diagnostic — Take Health / Ollama</h1>
 
   <div class="card">
     <div class="icon"><?= $curlOk ? 'ok' : 'err' ?></div>
->>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
     <div>
       <div class="label">Extension PHP cURL</div>
       <div class="val <?= $curlOk ? 'ok' : 'err' ?>"><?= $curlOk ? 'Disponible' : 'Non disponible — activer dans php.ini' ?></div>
@@ -94,18 +75,6 @@ try {
     </div>
   </div>
 
-<<<<<<< HEAD
-
-  <div class="card">
-    <div class="icon"><?= $ollamaUp ? '[OK]' : '[ERR]' ?></div>
-    <div>
-      <div class="label">Ollama (<?= OLLAMA_MODEL ?>) — <?= OLLAMA_URL ?></div>
-      <?php if ($ollamaUp): ?>
-        <div class="val ok">[OK] En ligne et fonctionnel</div>
-        <div class="code">Réponse test : "<?= htmlspecialchars(substr($ollamaReply, 0, 120)) ?>"</div>
-      <?php else: ?>
-        <div class="val err">[ERR] Hors ligne</div>
-=======
   <!-- Test Ollama -->
   <div class="card">
     <div class="icon"><?= $ollamaUp ? 'ok' : 'err' ?></div>
@@ -116,7 +85,6 @@ try {
         <div class="code">Réponse test : "<?= htmlspecialchars(substr($ollamaReply, 0, 120)) ?>"</div>
       <?php else: ?>
         <div class="val err"> Hors ligne</div>
->>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
         <div class="code"><?= htmlspecialchars($ollamaErr) ?></div>
         <div class="code" style="margin-top:8px">
           Pour lancer Ollama :<br>
@@ -129,19 +97,6 @@ try {
     </div>
   </div>
 
-<<<<<<< HEAD
-
-  <div class="card">
-    <div class="icon"><?= $dbOk ? '[OK]' : '[ERR]' ?></div>
-    <div>
-      <div class="label">Base de données MySQL (healthcare)</div>
-      <?php if ($dbOk): ?>
-        <div class="val ok">[OK] Toutes les tables presentes</div>
-      <?php else: ?>
-        <div class="val err">[ERR] Probleme detec te</div>
-        <div class="code"><?= htmlspecialchars($dbErr) ?></div>
-        <div style="margin-top:8px"><a href="/take_health/config/setup_db.php">Cliquer ici pour creer les tables automatiquement</a></div>
-=======
   <div class="card">
     <div class="icon"><?= $dbOk ? 'ok' : 'err' ?></div>
     <div>
@@ -152,24 +107,16 @@ try {
         <div class="val err"> Problème détecté</div>
         <div class="code"><?= htmlspecialchars($dbErr) ?></div>
         <div style="margin-top:8px"><a href="/take_health/config/setup_db.php">→ Cliquer ici pour créer les tables automatiquement</a></div>
->>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       <?php endif; ?>
     </div>
   </div>
 
   <?php if ($ollamaUp && $dbOk && $curlOk): ?>
     <div class="card" style="border: 1px solid #4ade80">
-<<<<<<< HEAD
-      <div class="icon">[SUCCESS]</div>
-      <div>
-        <div class="val ok">Tout est operationnel !</div>
-        <div style="margin-top:8px"><a href="/take_health/">Retour a l'application</a></div>
-=======
       <div class="icon">ok</div>
       <div>
         <div class="val ok">Tout est opérationnel !</div>
         <div style="margin-top:8px"><a href="/take_health/">→ Retour à l'application</a></div>
->>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       </div>
     </div>
   <?php endif; ?>
