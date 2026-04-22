@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +14,7 @@
     rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+<<<<<<< HEAD
 
 <body>
 
@@ -26,6 +31,22 @@
     </div>
     <div class="nav-user">
       <div class="avatar" id="nav-avatar">?</div>
+=======
+ 
+<body>
+ 
+  <!-- NAV -->
+  <nav id="main-nav" style="display:none">
+    <div class="logo">Nutri<span>Balance</span></div>
+    <div class="nav-links">
+      <button class="nav-link" onclick="showScreen('dashboard'); buildDashboard()">Tableau de bord</button>
+      <button class="nav-link" onclick="showScreen('coach'); loadChatHistory()">Assistant IA</button>
+      <button class="nav-link" onclick="showScreen('trends')">Analyses</button>
+      <button class="nav-link" onclick="showScreen('profile'); buildProfileCard()">Profil</button>
+    </div>
+    <div class="nav-user">
+      <div class="avatar" id="nav-avatar">P</div>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       <span class="nav-name" id="nav-name"></span>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
     </div>
@@ -53,7 +74,11 @@
         <div id="login-error" class="error-msg"></div>
         <button class="btn-primary" onclick="login()">Se connecter</button>
       </div>
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       <div id="tab-register" style="display:none">
         <div class="form-row">
           <div class="form-group">
@@ -132,6 +157,7 @@
       </div>
     </div>
   </div>
+<<<<<<< HEAD
 
   <div class="screen" id="screen-profile" >
     <div class="profile-wrap" >
@@ -141,15 +167,32 @@
         </div>
         <div class="section-title">Mon Profil Santé</div>
         <div class="badge">Profil certifié</div>
+=======
+ 
+  <div class="screen" id="screen-profile">
+    <div class="profile-wrap">
+      <div class="profile-header">
+        <div class="profile-icon">P</div>
+        <div class="section-title">Mon Profil Santé</div>
+        <div class="badge">Profil certifié ✓</div>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       </div>
       <div class="card" id="profile-info-card"></div>
       <div class="card" id="profile-bmi-card"></div>
       <button class="btn-primary" onclick="goToDashboard()" style="max-width:300px;margin:0 auto;display:block">
+<<<<<<< HEAD
         Accéder au tableau de bord
       </div>
     </div>
   </div>
 
+=======
+        Accéder au tableau de bord →
+      </button>
+    </div>
+  </div>
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
   <div class="screen" id="screen-dashboard">
     <div class="dashboard-wrap">
       <div class="dash-header">
@@ -158,7 +201,11 @@
           <div class="date-badge" id="dash-date"></div>
         </div>
       </div>
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       <div class="stats-row">
         <div class="stat-card">
           <div class="stat-val" id="stat-cal">0</div>
@@ -177,7 +224,11 @@
           <div class="stat-label">repas enregistrés</div>
         </div>
       </div>
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       <div class="card">
         <div class="progress-section">
           <div class="progress-header">
@@ -215,23 +266,36 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
 
       <div class="add-meal-card">
         <div class="section-title" style="font-size:1rem;margin-bottom:0.8rem">Ajouter un aliment</div>
         <div class="meal-type-row" id="meal-types">
           <button class="meal-type-btn active" onclick="selectMealType(this,'petit-déjeuner')">
             Petit-déjeuner</button>
+=======
+ 
+      <div class="add-meal-card">
+        <div class="section-title" style="font-size:1rem;margin-bottom:0.8rem">Ajouter un aliment</div>
+        <div class="meal-type-row" id="meal-types">
+          <button class="meal-type-btn active" onclick="selectMealType(this,'petit-déjeuner')">Petit-déjeuner</button>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
           <button class="meal-type-btn" onclick="selectMealType(this,'déjeuner')">Déjeuner</button>
           <button class="meal-type-btn" onclick="selectMealType(this,'dîner')">Dîner</button>
           <button class="meal-type-btn" onclick="selectMealType(this,'collation')">Collation</button>
         </div>
         <div class="food-input-row">
+<<<<<<< HEAD
           <div class="scanner-btn" onclick="scanPhoto()" title="Scanner une photo">Scan</div>
+=======
+          <div class="scanner-btn" onclick="scanPhoto()" title="Scanner une photo">Scanner</div>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
           <input type="text" id="food-input" placeholder="Ex: 200g de poulet grillé, 1 œuf, 250ml lait..."
             onkeydown="if(event.key==='Enter')addFood()">
           <button class="btn-add" id="add-btn" onclick="addFood()">Ajouter</button>
         </div>
         <div class="hint" style="margin-top:6px">Soyez précis sur la quantité pour une meilleure analyse</div>
+<<<<<<< HEAD
 
         <div class="meals-list" id="meals-list">
           <div class="empty-state">
@@ -251,10 +315,32 @@
           <div class="ai-action-card" onclick="generateMenu()">
             <div class="ai-card-icon">Cal</div>
             <div class="ai-card-name">Générer menu</div>
+=======
+ 
+        <div class="meals-list" id="meals-list">
+          <div class="empty-state">
+            <div class="ei"></div>Aucun aliment ajouté aujourd'hui
+          </div>
+        </div>
+      </div>
+ 
+      <div class="ai-analytics-section" style="margin-top:2rem">
+        <div class="section-title" style="margin-bottom:1rem">Intelligence Artificielle</div>
+        <div class="ai-actions-grid">
+          <div class="ai-action-card" onclick="predictDeficiencies()">
+            <div class="ai-card-icon"></div>
+            <div class="ai-card-name">Prédire les carences</div>
+            <div class="ai-card-sub">Analyse sur 7/30 jours</div>
+          </div>
+          <div class="ai-action-card" onclick="generateMenu()">
+            <div class="ai-card-icon"></div>
+            <div class="ai-card-name">Générer un menu</div>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
             <div class="ai-card-sub">Plan de repas complet</div>
           </div>
         </div>
       </div>
+<<<<<<< HEAD
 
       <button class="btn-analyze" id="analyze-btn" onclick="analyzeNutrition()" disabled style="margin-top:1.5rem">
         IA - Analyser mon alimentation (Aujourd'hui)
@@ -262,12 +348,22 @@
 
       <div id="analysis-result"></div>
 
+=======
+ 
+      <button class="btn-analyze" id="analyze-btn" onclick="analyzeNutrition()" disabled style="margin-top:1.5rem">
+        Lancer l'analyse (Aujourd'hui)
+      </button>
+ 
+      <div id="analysis-result"></div>
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       <div class="card" id="tips-card" style="display:none">
         <div class="section-title" style="font-size:1rem">Recommandations personnalisées</div>
         <ul class="tips-list" id="tips-list"></ul>
       </div>
     </div>
   </div>
+<<<<<<< HEAD
 
   <div class="screen" id="screen-coach">
     <div class="coach-wrap">
@@ -275,11 +371,24 @@
         <div class="coach-avatar"><img src="logos/Coach Nutri IA.jpg" alt="Coach Nutri IA" height="40px" width="60px"></div>
         <div>
           <div class="coach-name">Coach Nutri IA</div>
+=======
+ 
+  <div class="screen" id="screen-coach">
+    <div class="coach-wrap">
+      <div class="coach-header">
+        <div class="coach-avatar">IA</div>
+        <div>
+          <div class="coach-name">Assistant Nutritionnel IA</div>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
           <div class="coach-status">En ligne — Prêt à vous aider</div>
         </div>
       </div>
       <div class="chat-container" id="chat-messages">
+<<<<<<< HEAD
         <div class="bot-msg">Bonjour ! Je suis votre coach nutritionnel. Comment puis-je vous aider aujourd'hui ?</div>
+=======
+        <div class="bot-msg">Bonjour ! Je suis votre assistant nutritionnel. Comment puis-je vous aider aujourd'hui ?</div>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       </div>
       <div class="chat-input-row">
         <input type="text" id="chat-input" placeholder="Posez votre question..."
@@ -288,6 +397,7 @@
       </div>
     </div>
   </div>
+<<<<<<< HEAD
 
   <div class="screen" id="screen-trends">
     <div class="trends-wrap">
@@ -306,6 +416,26 @@
         </button>
       </div>
 
+=======
+ 
+  <div class="screen" id="screen-trends">
+    <div class="trends-wrap">
+ 
+      <div class="trends-header">
+        <div class="section-title" style="margin-bottom:0">Analyse &amp; Menus</div>
+        <div class="trends-subtitle">Analyses nutritionnelles personnalisées par IA</div>
+      </div>
+ 
+      <div class="trend-tabs">
+        <button class="trend-tab active" onclick="switchTrendTab(this, 'deficiencies')">
+          <span class="trend-tab-icon"></span> Carences
+        </button>
+        <button class="trend-tab" onclick="switchTrendTab(this, 'menus')">
+          <span class="trend-tab-icon"></span> Menu hebdomadaire
+        </button>
+      </div>
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       <div id="trend-content-deficiencies" class="trend-content">
         <div class="card trends-card">
           <div class="trends-card-header">
@@ -325,13 +455,21 @@
           </div>
           <div class="deficiency-list" id="deficiency-list">
             <div class="empty-state">
+<<<<<<< HEAD
               <div class="empty-icon">DNA</div>
+=======
+              <div class="empty-icon"></div>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
               <div>Lancez l'analyse pour détecter vos carences potentielles</div>
             </div>
           </div>
         </div>
       </div>
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
       <div id="trend-content-menus" class="trend-content" style="display:none">
         <div class="card trends-card">
           <div class="trends-card-header">
@@ -345,12 +483,17 @@
           </div>
           <div class="menu-display" id="menu-display">
             <div class="empty-state">
+<<<<<<< HEAD
               <div class="empty-icon">Repas</div>
+=======
+              <div class="empty-icon"></div>
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
               <div>Générez votre plan repas hebdomadaire personnalisé</div>
             </div>
           </div>
         </div>
       </div>
+<<<<<<< HEAD
 
     </div>
   </div>
@@ -358,4 +501,13 @@
   <script src="app.js"></script>
 </body>
 
+=======
+ 
+    </div>
+  </div>
+ 
+  <script src="app.js"></script>
+</body>
+ 
+>>>>>>> 214b8a03c8d26049b35984f743df4f369ace9f21
 </html>
