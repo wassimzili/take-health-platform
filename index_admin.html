@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard — NutriBalance</title>
+  <title>Medecin Dashboard — Health Care</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
     rel="stylesheet">
@@ -14,23 +15,23 @@
 
   <nav id="main-nav">
     <div class="logo" onclick="location.href='index_admin.html'" style="cursor:pointer">
-      <img src="logos/health care logo.jpg" alt="Logo"  width="200px" height="100px">
+      <img src="logos/health care logo.jpg" alt="Logo" width="200px" height="100px">
     </div>
-    
+
     <div class="nav-links">
-      <button class="nav-link" onclick="showScreen('admin'); loadAdminUsers()">Admin</button>
+      <button class="nav-link" onclick="showScreen('admin'); loadAdminUsers()">Medecin</button>
       <button class="nav-link" onclick="showScreen('community'); loadCommunity()">Communauté</button>
     </div>
     <div class="nav-user">
       <div class="avatar" id="nav-avatar">A</div>
-      <span class="nav-name" id="nav-name">Admin</span>
+      <span class="nav-name" id="nav-name">Medecin</span>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
     </div>
   </nav>
 
   <div class="screen active" id="screen-admin">
     <div class="admin-wrap">
-      <div class="section-title">Tableau de Bord Administrateur</div>
+      <div class="section-title">Tableau de Bord Medecin</div>
       <div class="card">
         <div class="admin-header">
           <h3>Utilisateurs du système</h3>
@@ -42,7 +43,8 @@
       </div>
 
       <div id="user-history-section" style="display:none; margin-top: 2rem;">
-        <div class="section-title">Historique Alimentaire (15 derniers jours) : <span id="history-user-name"></span></div>
+        <div class="section-title">Historique Alimentaire (15 derniers jours) : <span id="history-user-name"></span>
+        </div>
         <div id="admin-user-history" class="history-list">
           <!-- History will be loaded here -->
         </div>
@@ -99,4 +101,5 @@
 
   <script src="app_admin.js"></script>
 </body>
+
 </html>
