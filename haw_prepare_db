@@ -9,8 +9,9 @@ CREATE TABLE users (
     nom VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    is_admin TINYINT(1) DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE KEY(email)
+    UNIQUE KEY email (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Table: profiles
@@ -20,49 +21,27 @@ CREATE TABLE profiles (
     age TINYINT(3) UNSIGNED NOT NULL,
     height_cm SMALLINT(5) UNSIGNED NOT NULL,
     weight_kg DECIMAL(5,2) NOT NULL,
-    gender ENUM('male', 'female') NOT NULL,
+    gender ENUM('male','female') NOT NULL,
     activity_factor DECIMAL(4,3) NOT NULL DEFAULT 1.550,
-    goal ENUM('maintain', 'lose', 'gain') NOT NULL DEFAULT 'maintain',
-    medical_notes TEXT NULL,
-    bmi DECIMAL(4,1) NULL,
+    goal ENUM('maintain','lose','gain') NOT NULL DEFAULT 'maintain',
+    medical_notes TEXT DEFAULT NULL,
+    bmi DECIMAL(4,1) DEFAULT NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX(user_id),
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    UNIQUE KEY user_id (user_id),
+    CONSTRAINT profiles_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Table: ai_analyses
-CREATE TABLE ai_analyses (
-    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    log_id INT(11) NOT NULL,
-    user_id INT(11) NOT NULL,
-    status VARCHAR(30) NOT NULL,
-    title VARCHAR(200) NULL,
-    summary TEXT NULL,
-    tips TEXT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX(log_id),
-    INDEX(user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Table: ai_chat_history
-CREATE TABLE ai_chat_history (
+-- Table: nutrition_targets
+CREATE TABLE nutrition_targets (
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INT(11) NOT NULL,
-    role ENUM('user','bot') NOT NULL,
-    message TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX(user_id),
-    INDEX(created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Table: ai_reports
-CREATE TABLE ai_reports (
-    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    user_id INT(11) NOT NULL,
-    type ENUM('deficiency','menu') NOT NULL,
-    content LONGTEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX(user_id)
+    tdee_kcal SMALLINT(5) UNSIGNED NOT NULL,
+    protein_g SMALLINT(5) UNSIGNED NOT NULL,
+    carbs_g SMALLINT(5) UNSIGNED NOT NULL,
+    fat_g SMALLINT(5) UNSIGNED NOT NULL,
+    calculated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY user_id (user_id),
+    CONSTRAINT nutrition_targets_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Table: daily_logs
@@ -75,8 +54,8 @@ CREATE TABLE daily_logs (
     total_carbs_g SMALLINT(5) UNSIGNED DEFAULT 0,
     total_fat_g SMALLINT(5) UNSIGNED DEFAULT 0,
     status VARCHAR(30) DEFAULT 'pending',
-    INDEX(user_id),
-    INDEX(log_date)
+    UNIQUE KEY unique_user_date (user_id, log_date),
+    CONSTRAINT daily_logs_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Table: food_items
@@ -94,7 +73,7 @@ CREATE TABLE food_items (
     minerals VARCHAR(150) DEFAULT NULL COMMENT 'Minéraux principaux',
     is_healthy TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX(category)
+    KEY idx_category (category)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Table: meals
@@ -108,20 +87,78 @@ CREATE TABLE meals (
     protein_g SMALLINT(5) UNSIGNED DEFAULT 0,
     carbs_g SMALLINT(5) UNSIGNED DEFAULT 0,
     fat_g SMALLINT(5) UNSIGNED DEFAULT 0,
-    fat_g SMALLINT(5) UNSIGNED NOT NULL,
-    calculated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    INDEX(user_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    estimated_by_ai TINYINT(1) DEFAULT 0,
+    added_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY log_id (log_id),
+    KEY user_id (user_id),
+    CONSTRAINT meals_ibfk_1 FOREIGN KEY (log_id) REFERENCES daily_logs (id) ON DELETE CASCADE,
+    CONSTRAINT meals_ibfk_2 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: ai_analyses
+CREATE TABLE ai_analyses (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    log_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    status VARCHAR(30) NOT NULL,
+    title VARCHAR(200) DEFAULT NULL,
+    summary TEXT DEFAULT NULL,
+    tips TEXT DEFAULT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY log_id (log_id),
+    KEY user_id (user_id),
+    CONSTRAINT ai_analyses_ibfk_1 FOREIGN KEY (log_id) REFERENCES daily_logs (id) ON DELETE CASCADE,
+    CONSTRAINT ai_analyses_ibfk_2 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: ai_chat_history
+CREATE TABLE ai_chat_history (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    role ENUM('user','bot') NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_user_created (user_id, created_at),
+    CONSTRAINT ai_chat_history_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: ai_reports
+CREATE TABLE ai_reports (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    type ENUM('deficiency','menu') NOT NULL,
+    content LONGTEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY user_id (user_id),
+    CONSTRAINT ai_reports_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Table: community_posts
 CREATE TABLE community_posts (
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INT(11) NOT NULL,
+    recipient_id INT(11) DEFAULT NULL,
     type ENUM('question','bilan') NOT NULL,
     title VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     image_path VARCHAR(255) DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY user_id (user_id),
+    KEY fk_recipient (recipient_id),
+    CONSTRAINT community_posts_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_recipient FOREIGN KEY (recipient_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: post_responses
+CREATE TABLE post_responses (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    post_id INT(11) NOT NULL,
+    user_id INT(11) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    image_path VARCHAR(255) DEFAULT NULL,
+    KEY post_id (post_id),
+    KEY user_id (user_id),
+    CONSTRAINT post_responses_ibfk_1 FOREIGN KEY (post_id) REFERENCES community_posts (id) ON DELETE CASCADE,
+    CONSTRAINT post_responses_ibfk_2 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
