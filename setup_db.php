@@ -8,6 +8,7 @@ $tables = [
         `nom`           VARCHAR(50)  NOT NULL,
         `email`         VARCHAR(100) NOT NULL UNIQUE,
         `password_hash` VARCHAR(255) NOT NULL,
+        `is_admin`      TINYINT(1) DEFAULT 0,
         `created_at`    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
     "CREATE TABLE IF NOT EXISTS `profiles` (
@@ -106,6 +107,16 @@ $tables = [
         FOREIGN KEY (`log_id`)  REFERENCES `daily_logs`(`id`) ON DELETE CASCADE,
         FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
+    "CREATE TABLE IF NOT EXISTS `community_posts` (
+        `id`         INT AUTO_INCREMENT PRIMARY KEY,
+        `user_id`    INT NOT NULL,
+        `type`       ENUM('question','bilan') NOT NULL,
+        `title`      VARCHAR(255) NOT NULL,
+        `content`    TEXT NOT NULL,
+        `image_path` VARCHAR(255) DEFAULT NULL,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
 ];
 $foodItems = [
     ['Œuf brouillé',         'petit-dejeuner', '100g', 155, 13.6, 1.1,  11.0, 0.0,  'Vitamine D, B12', 'Fer, Choline'],
@@ -166,6 +177,21 @@ try {
 } catch (PDOException $e) {
     $errors[] = "Seed aliments : " . $e->getMessage();
 }
+
+// Seed Admin User
+try {
+    $adminEmail = 'admin@gmail.com';
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+    $stmt->execute([$adminEmail]);
+    if ($stmt->fetchColumn() == 0) {
+        $stmt = $pdo->prepare("INSERT INTO users (prenom, nom, email, password_hash, is_admin) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute(['Admin', 'System', $adminEmail, password_hash('admin', PASSWORD_DEFAULT), 1]);
+        $created[] = "Admin user created (admin@gmail.com / admin)";
+    }
+} catch (PDOException $e) {
+    $errors[] = "Seed Admin : " . $e->getMessage();
+}
+
 $pdo->exec("SET FOREIGN_KEY_CHECKS=1");
 ?>
 <!DOCTYPE html>

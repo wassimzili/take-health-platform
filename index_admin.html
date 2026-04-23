@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — NutriBalance</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <nav id="main-nav">
+    <div class="logo" onclick="location.href='index_admin.html'" style="cursor:pointer">
+      <img src="logos/health care logo.jpg" alt="Logo"  width="200px" height="100px">
+    </div>
+    
+    <div class="nav-links">
+      <button class="nav-link" onclick="showScreen('admin'); loadAdminUsers()">Admin</button>
+      <button class="nav-link" onclick="showScreen('community'); loadCommunity()">Communauté</button>
+    </div>
+    <div class="nav-user">
+      <div class="avatar" id="nav-avatar">A</div>
+      <span class="nav-name" id="nav-name">Admin</span>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </nav>
+
+  <div class="screen active" id="screen-admin">
+    <div class="admin-wrap">
+      <div class="section-title">Tableau de Bord Administrateur</div>
+      <div class="card">
+        <div class="admin-header">
+          <h3>Utilisateurs du système</h3>
+          <button class="btn-secondary" onclick="loadAdminUsers()">Rafraîchir</button>
+        </div>
+        <div id="admin-users-list" class="users-grid">
+          <!-- Users will be loaded here -->
+        </div>
+      </div>
+
+      <div id="user-history-section" style="display:none; margin-top: 2rem;">
+        <div class="section-title">Historique Alimentaire (15 derniers jours) : <span id="history-user-name"></span></div>
+        <div id="admin-user-history" class="history-list">
+          <!-- History will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-community">
+    <div class="community-wrap">
+      <div class="section-title">Espace Médical & Communauté</div>
+      <div class="community-actions">
+        <button class="btn-primary" onclick="showPostModal()">Poser une question / Partager un bilan</button>
+      </div>
+      <div id="community-posts" class="posts-list">
+        <!-- Posts will be loaded here -->
+      </div>
+    </div>
+
+    <!-- Modal for new post -->
+    <div id="post-modal" class="modal" style="display:none">
+      <div class="modal-content">
+        <span class="close" onclick="closePostModal()">&times;</span>
+        <h3>Nouveau Post</h3>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="post-type">
+            <option value="question">Question</option>
+            <option value="bilan">Bilan Médical (Photo)</option>
+          </select>
+        </div>
+        <div class="form-group" id="post-recipient-group">
+          <label>Pour quel utilisateur ? (Optionnel)</label>
+          <select id="post-recipient">
+            <option value="">Tout le monde (Public)</option>
+            <!-- Users will be loaded here -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Titre</label>
+          <input type="text" id="post-title" placeholder="Ex: Question sur le fer">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="post-content" rows="4" placeholder="Votre message..."></textarea>
+        </div>
+        <div class="form-group" id="post-image-group" style="display:none">
+          <label>Photo du bilan</label>
+          <input type="file" id="post-image" accept="image/*">
+        </div>
+        <button class="btn-primary" onclick="submitPost()">Publier</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app_admin.js"></script>
+</body>
+</html>

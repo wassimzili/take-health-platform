@@ -60,7 +60,8 @@ switch ($action) {
         if ($user && password_verify($data['pass'], $user['password_hash'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['prenom'];
-            jsonResponse(true, ['user' => ['id' => $user['id'], 'prenom' => $user['prenom']]]);
+            $_SESSION['is_admin'] = (bool)$user['is_admin'];
+            jsonResponse(true, ['user' => ['id' => $user['id'], 'prenom' => $user['prenom'], 'is_admin' => (bool)$user['is_admin']]]);
         } else {
             jsonResponse(false, [], 'Identifiants incorrects');
         }
@@ -69,6 +70,20 @@ switch ($action) {
     case 'logout':
         session_destroy();
         jsonResponse(true);
+        break;
+
+    case 'check':
+        if (isset($_SESSION['user_id'])) {
+            jsonResponse(true, [
+                'user' => [
+                    'id' => $_SESSION['user_id'],
+                    'prenom' => $_SESSION['user_name'],
+                    'is_admin' => $_SESSION['is_admin'] ?? false
+                ]
+            ]);
+        } else {
+            jsonResponse(false);
+        }
         break;
     default:
         jsonResponse(false, [], 'Action inconnue');

@@ -13,15 +13,16 @@
 <body>
 
   <nav id="main-nav" style="display:none">
-    <div class="logo" >
+    <div class="logo" onclick="goHome()" style="cursor:pointer">
       <img src="logos/health care logo.jpg" alt="Logo"  width="200px" height="100px">
     </div>
     
     <div class="nav-links">
-      <button class="nav-link" onclick="showScreen('dashboard'); buildDashboard()">Dashboard</button>
-      <button class="nav-link" onclick="showScreen('coach'); loadChatHistory()">Coach IA</button>
-      <button class="nav-link" onclick="showScreen('trends')">Tendances</button>
-      <button class="nav-link" onclick="showScreen('profile'); buildProfileCard()">Profil</button>
+      <button class="nav-link" id="nav-dashboard" onclick="showScreen('dashboard'); buildDashboard()">Dashboard</button>
+      <button class="nav-link" id="nav-community" onclick="showScreen('community'); loadCommunity()">Communauté</button>
+      <button class="nav-link" id="nav-coach" onclick="showScreen('coach'); loadChatHistory()">Coach IA</button>
+      <button class="nav-link" id="nav-trends" onclick="showScreen('trends')">Tendances</button>
+      <button class="nav-link" id="nav-profile" onclick="showScreen('profile'); buildProfileCard()">Profil</button>
     </div>
     <div class="nav-user">
       <div class="avatar" id="nav-avatar">?</div>
@@ -99,11 +100,11 @@
             <label>Activité physique</label>
             <div class="goal-select-wrap">
               <select id="reg-activity">
-                <option value="1.2">Sédentaire</option>
-                <option value="1.375">Légère (1-3j/sem)</option>
-                <option value="1.55" selected>Modérée (3-5j/sem)</option>
-                <option value="1.725">Active (6-7j/sem)</option>
-                <option value="1.9">Très active</option>
+                <option value="1.2">1-Activité sédentaire (inactive)</option>
+                <option value="1.375">2-Activité légère</option>
+                <option value="1.55" selected>3-Activité modérée</option>
+                <option value="1.725">4-Activité intense (vigoureuse)</option>
+                <option value="1.9">5-Activité de musculation</option>
               </select>
             </div>
           </div>
@@ -350,6 +351,53 @@
     </div>
   </div>
  
+  <div class="screen" id="screen-community">
+    <div class="community-wrap">
+      <div class="section-title">Espace Médical & Communauté</div>
+      <div class="community-actions">
+        <button class="btn-primary" onclick="showPostModal()">Poser une question / Partager un bilan</button>
+      </div>
+      <div id="community-posts" class="posts-list">
+        <!-- Posts will be loaded here -->
+      </div>
+    </div>
+
+    <!-- Modal for new post -->
+    <div id="post-modal" class="modal" style="display:none">
+      <div class="modal-content">
+        <span class="close" onclick="closePostModal()">&times;</span>
+        <h3>Nouveau Post</h3>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="post-type">
+            <option value="question">Question</option>
+            <option value="bilan">Bilan Médical (Photo)</option>
+          </select>
+        </div>
+        <div class="form-group" id="post-recipient-group" style="display:none">
+          <label>Pour quel utilisateur ? (Optionnel)</label>
+          <select id="post-recipient">
+            <option value="">Tout le monde (Public)</option>
+            <!-- Users will be loaded here -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Titre</label>
+          <input type="text" id="post-title" placeholder="Ex: Question sur le fer">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="post-content" rows="4" placeholder="Votre message..."></textarea>
+        </div>
+        <div class="form-group" id="post-image-group" style="display:none">
+          <label>Photo du bilan</label>
+          <input type="file" id="post-image" accept="image/*">
+        </div>
+        <button class="btn-primary" onclick="submitPost()">Publier</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
  

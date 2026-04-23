@@ -14,5 +14,11 @@ $today = date('Y-m-d');
 $stmt = $pdo->prepare("SELECT m.* FROM meals m JOIN daily_logs l ON m.log_id = l.id WHERE l.user_id = ? AND l.log_date = ? ORDER BY m.added_at DESC");
 $stmt->execute([$userId, $today]);
 $meals = $stmt->fetchAll();
-jsonResponse(true, ['user_name' => $_SESSION['user_name'],'profile' => $profile,'targets' => $targets,'meals' => $meals]);
+jsonResponse(true, [
+    'user_name' => $_SESSION['user_name'],
+    'is_admin' => $_SESSION['is_admin'] ?? false,
+    'profile' => $profile,
+    'targets' => $targets,
+    'meals' => $meals
+]);
 ?>
