@@ -122,6 +122,27 @@ switch ($action) {
         }
         break;
 
+    case 'delete_post':
+        if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']) {
+            jsonResponse(false, [], 'Non autorisé');
+        }
+        $postId = $_POST['post_id'] ?? null;
+        if (!$postId) {
+            jsonResponse(false, [], 'ID du post manquant');
+        }
+        try {
+            $stmt = $pdo->prepare("DELETE FROM post_responses WHERE post_id = ?");
+            $stmt->execute([$postId]);
+            
+            $stmt = $pdo->prepare("DELETE FROM community_posts WHERE id = ?");
+            $stmt->execute([$postId]);
+            
+            jsonResponse(true);
+        } catch (Exception $e) {
+            jsonResponse(false, [], $e->getMessage());
+        }
+        break;
+
     default:
         jsonResponse(false, [], 'Action inconnue');
         break;

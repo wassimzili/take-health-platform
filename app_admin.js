@@ -161,7 +161,10 @@ async function loadCommunity() {
                                     <span class="post-date">${new Date(p.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                                 </div>
                             </div>
-                            <span class="post-type-tag">${typeLabel}</span>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="post-type-tag">${typeLabel}</span>
+                                <button class="btn-sm btn-danger" onclick="deletePost(${p.id})" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Supprimer</button>
+                            </div>
                         </div>
                         <div class="post-body">
                             <div class="post-title">${p.title}</div>
@@ -200,6 +203,28 @@ async function addResponse(postId) {
 
     try {
         const resp = await fetch('api/community.php?action=add_response', {
+            method: 'POST',
+            body: formData
+        });
+        const res = await resp.json();
+        if (res.success) {
+            loadCommunity();
+        } else {
+            alert('Erreur: ' + res.error);
+        }
+    } catch (err) {
+        alert('Erreur réseau');
+    }
+}
+
+async function deletePost(postId) {
+    if (!confirm('Voulez-vous vraiment supprimer cette conversation ?')) return;
+
+    const formData = new FormData();
+    formData.append('post_id', postId);
+
+    try {
+        const resp = await fetch('api/community.php?action=delete_post', {
             method: 'POST',
             body: formData
         });
